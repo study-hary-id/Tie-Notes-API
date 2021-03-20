@@ -1,6 +1,5 @@
 import React from 'react';
-import Header from '../components/shared/Header';
-import Footer from '../components/shared/Header';
+import PageLayout from '../layouts/PageLayout';
 
 const AddNoteForm = () => {
   return (
@@ -22,12 +21,10 @@ const AddNoteForm = () => {
 
 const AddPage = () => {
   return (
-    <>
-      <Header />
+    <PageLayout>
       <h1>Add New Note</h1>
       <AddNoteForm />
-      <Footer />
-    </>
+    </PageLayout>
   );
 };
 

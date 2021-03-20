@@ -1,6 +1,5 @@
 import React from 'react';
-import Header from '../components/shared/Header';
-import Footer from '../components/shared/Footer';
+import PageLayout from '../layouts/PageLayout';
 
 const NotesList = () => {
   return <div>Notes List</div>;
@@ -8,12 +7,10 @@ const NotesList = () => {
 
 const HomePage = () => {
   return (
-    <>
-      <Header />
+    <PageLayout>
       <button>Add New Note</button>
       <NotesList />
-      <Footer />
-    </>
+    </PageLayout>
   );
 };
 
