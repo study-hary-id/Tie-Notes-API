@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { Form, FormGroup, Label, Input, TextArea } from './ui/Forms';
 import Button from './ui/Button';
+import getLocalStorageData from '../utils/getLocalStorageData';
 
 const EditNoteForm = () => {
   const history = useHistory();
@@ -10,8 +11,7 @@ const EditNoteForm = () => {
   const [currentNote, setCurrentNote] = useState({ title: '', note: '' });
 
   useEffect(() => {
-    const existing = localStorage.getItem('notes');
-    const notes = existing ? JSON.parse(existing) : [];
+    const notes = getLocalStorageData('notes');
     setAllNotes(notes);
 
     const noteId = location.pathname.replace('/edit/', '');
@@ -65,7 +65,9 @@ const EditNoteForm = () => {
       </FormGroup>
       <FormGroup>
         <Button type="submit">Add</Button>
-        <Button onClick={handleDeleteNote}>Delete</Button>
+        <Button danger onClick={handleDeleteNote}>
+          Delete
+        </Button>
       </FormGroup>
     </Form>
   );

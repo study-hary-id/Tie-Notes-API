@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Button = styled.button`
-  background: #3182ce;
+  background: ${(props) => (props.danger ? '#F56565' : '#3182ce')};
   color: white;
   font-size: 1em;
   margin: 1rem 0;
