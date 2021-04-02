@@ -1,31 +1,21 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PageLayout from '../layouts/PageLayout';
+import Container from '../components/ui/Container';
+import AddNoteForm from '../components/AddNoteForm';
 
-const AddNoteForm = () => {
-  return (
-    <>
-      <form>
-        <label>
-          Title :
-          <input type="text" name="title" />
-        </label>
-        <label>
-          Note :
-          <textarea name="note" />
-        </label>
-        <button type="submit">Add</button>
-      </form>
-    </>
-  );
-};
-
-const AddPage = () => {
-  return (
-    <PageLayout>
-      <h1>Add New Note</h1>
+const AddPage = () => (
+  <PageLayout>
+    <Container>
+      <div>
+        <h4>
+          <Link to="/">Home</Link> / Add
+        </h4>
+      </div>
+      <h2>Add New Note</h2>
       <AddNoteForm />
-    </PageLayout>
-  );
-};
+    </Container>
+  </PageLayout>
+);
 
 export default AddPage;

@@ -1,17 +1,19 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PageLayout from '../layouts/PageLayout';
+import NotesList from '../components/NotesList';
+import Container from '../components/ui/Container';
+import Button from '../components/ui/Button';
 
-const NotesList = () => {
-  return <div>Notes List</div>;
-};
-
-const HomePage = () => {
-  return (
-    <PageLayout>
-      <button>Add New Note</button>
+const HomePage = () => (
+  <PageLayout>
+    <Container>
+      <Link to="/add">
+        <Button>Add New Note</Button>
+      </Link>
       <NotesList />
-    </PageLayout>
-  );
-};
+    </Container>
+  </PageLayout>
+);
 
 export default HomePage;

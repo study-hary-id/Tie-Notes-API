@@ -1,32 +1,21 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PageLayout from '../layouts/PageLayout';
+import Container from '../components/ui/Container';
+import EditNoteForm from '../components/EditNoteForm';
 
-const EditNoteForm = () => {
-  return (
-    <>
-      <form>
-        <label>
-          Title :
-          <input type="text" name="title" />
-        </label>
-        <label>
-          Note :
-          <textarea name="note" />
-        </label>
-        <button type="submit">Save</button>
-        <button>Delete</button>
-      </form>
-    </>
-  );
-};
-
-const EditPage = () => {
-  return (
-    <PageLayout>
-      <h1>Edit Note</h1>
+const EditPage = () => (
+  <PageLayout>
+    <Container>
+      <div>
+        <h4>
+          <Link to="/">Home</Link> / Edit{' '}
+        </h4>
+      </div>
+      <h2>Edit Note</h2>
       <EditNoteForm />
-    </PageLayout>
-  );
-};
+    </Container>
+  </PageLayout>
+);
 
 export default EditPage;
