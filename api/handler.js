@@ -6,51 +6,70 @@
 
 const { ObjectId } = require('mongodb');
 
-exports.addNote = (req, res) => {
+exports.addNote = async (req, res, next) => {
   const { notesCollection } = req.app.locals;
+  const { title } = req.body;
 
-  notesCollection.insertOne(req.body).then((result) => {
+  try {
+    if (!title) {
+      throw new Error('Title is missing');
+    }
+
+    const result = await notesCollection.insertOne(req.body);
+    res.status(200).json('Data successfully saved');
     console.log(result);
-  });
-
-  res.status(200).json('Data successfully saved');
+  } catch (error) {
+    next(error);
+  }
 };
 
-exports.getNotes = (req, res) => {
+exports.getNotes = async (req, res, next) => {
   const { notesCollection } = req.app.locals;
 
-  notesCollection
-    .find()
-    .toArray()
-    .then((result) => {
-      res.status(200).json(result);
-    });
-};
-
-exports.getNote = (req, res) => {
-  const { notesCollection } = req.app.locals;
-
-  notesCollection.findOne({ _id: ObjectId(req.params.id) }).then((result) => {
+  try {
+    const result = await notesCollection.find().toArray();
     res.status(200).json(result);
-  });
+  } catch (error) {
+    next(error);
+  }
 };
 
-exports.updateNote = (req, res) => {
+exports.getNote = async (req, res, next) => {
   const { notesCollection } = req.app.locals;
 
-  notesCollection
-    .updateOne({ _id: ObjectId(req.params.id) }, { $set: { title: req.body.title, note: req.body.note } })
-    .then((result) => console.log(result));
-
-  res.status(200).json('Data successfully updated');
+  try {
+    const result = await notesCollection.findOne({ _id: ObjectId(req.params.id) });
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
 };
 
-exports.deleteNote = (req, res) => {
+exports.updateNote = async (req, res, next) => {
   const { notesCollection } = req.app.locals;
 
-  notesCollection.deleteOne({ _id: ObjectId(req.params.id) }).then((result) => {
+  try {
+    const result = await notesCollection.updateOne(
+      { _id: ObjectId(req.params.id) },
+      { $set: { title: req.body.title, note: req.body.note } }
+    );
+
+    res.status(200).json('Data successfully updated');
     console.log(result);
-  });
+  } catch (error) {
+    next(error);
+  }
+};
 
-  res.status(200).json('Data successfully deleted');
+exports.deleteNote = async (req, res, next) => {
+  const { notesCollection } = req.app.locals;
+
+  try {
+    const result = await notesCollection.deleteOne({ _id: ObjectId(req.params.id) });
+
+    res.status(200).json('Data successfully deleted');
+    console.log(result);
+  } catch (error) {
+    next(error);
+  }
 };

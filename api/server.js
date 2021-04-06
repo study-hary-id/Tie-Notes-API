@@ -10,6 +10,7 @@ const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
 
 const routes = require('./routes');
+const handleErrors = require('./middlewares/errorHandler');
 
 // Express configuration section
 const app = express();
@@ -32,6 +33,8 @@ MongoClient.connect(url, (err, client) => {
 
 // Route handler for express
 app.use('/', routes);
+
+app.use(handleErrors);
 
 app.listen(port, () => {
   // eslint-disable-next-line no-console
