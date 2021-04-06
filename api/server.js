@@ -13,76 +13,59 @@ const dbName = 'DinoTesDB';
 // body-parser works as middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Connect to MongoDB with MongoClient
+MongoClient.connect(url, (err, client) => {
+  const db = client.db(dbName);
+  const notesCollection = db.collection('notes');
+
+  app.locals.notesCollection = notesCollection;
+});
+
 // Route handler for RESTful API
 app.post('/api/notes', (req, res) => {
-  MongoClient.connect(url, (err, client) => {
-    const db = client.db(dbName);
-    const notesCollection = db.collection('notes');
+  const { notesCollection } = req.app.locals;
 
-    notesCollection.insertOne(req.body).then((result) => {
-      console.log(result);
-    });
-
-    client.close();
+  notesCollection.insertOne(req.body).then((result) => {
+    console.log(result);
   });
 
   res.status(200).json('Data successfully saved');
 });
 
 app.get('/api/notes', (req, res) => {
-  MongoClient.connect(url, (err, client) => {
-    const db = client.db(dbName);
-    const notesCollection = db.collection('notes');
+  const { notesCollection } = req.app.locals;
 
-    notesCollection
-      .find()
-      .toArray()
-      .then((result) => {
-        res.status(200).json(result);
-      });
-
-    client.close();
-  });
+  notesCollection
+    .find()
+    .toArray()
+    .then((result) => {
+      res.status(200).json(result);
+    });
 });
 
 app.get('/api/notes/:id', (req, res) => {
-  MongoClient.connect(url, (err, client) => {
-    const db = client.db(dbName);
-    const notesCollection = db.collection('notes');
+  const { notesCollection } = req.app.locals;
 
-    notesCollection.findOne({ _id: ObjectId(req.params.id) }).then((result) => {
-      res.status(200).json(result);
-    });
-
-    client.close();
+  notesCollection.findOne({ _id: ObjectId(req.params.id) }).then((result) => {
+    res.status(200).json(result);
   });
 });
 
 app.put('/api/notes/:id', (req, res) => {
-  MongoClient.connect(url, (err, client) => {
-    const db = client.db(dbName);
-    const notesCollection = db.collection('notes');
+  const { notesCollection } = req.app.locals;
 
-    notesCollection
-      .updateOne({ _id: ObjectId(req.params.id) }, { $set: { title: req.body.title, note: req.body.note } })
-      .then((result) => console.log(result));
-
-    client.close();
-  });
+  notesCollection
+    .updateOne({ _id: ObjectId(req.params.id) }, { $set: { title: req.body.title, note: req.body.note } })
+    .then((result) => console.log(result));
 
   res.status(200).json('Data successfully updated');
 });
 
 app.delete('/api/notes/:id', (req, res) => {
-  MongoClient.connect(url, (err, client) => {
-    const db = client.db(dbName);
-    const notesCollection = db.collection('notes');
+  const { notesCollection } = req.app.locals;
 
-    notesCollection.deleteOne({ _id: ObjectId(req.params.id) }).then((result) => {
-      console.log(result);
-    });
-
-    client.close();
+  notesCollection.deleteOne({ _id: ObjectId(req.params.id) }).then((result) => {
+    console.log(result);
   });
 
   res.status(200).json('Data successfully deleted');
