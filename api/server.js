@@ -1,6 +1,15 @@
+/*
+  The main file from the server which is responsible for
+  loading middleware, import modules and packages,
+  managing the connection to the database
+  and running the http server.
+*/
+
 const express = require('express');
 const bodyParser = require('body-parser');
-const { MongoClient, ObjectId } = require('mongodb');
+const { MongoClient } = require('mongodb');
+
+const routes = require('./routes');
 
 // Express configuration section
 const app = express();
@@ -21,56 +30,10 @@ MongoClient.connect(url, (err, client) => {
   app.locals.notesCollection = notesCollection;
 });
 
-// Route handler for RESTful API
-app.post('/api/notes', (req, res) => {
-  const { notesCollection } = req.app.locals;
-
-  notesCollection.insertOne(req.body).then((result) => {
-    console.log(result);
-  });
-
-  res.status(200).json('Data successfully saved');
-});
-
-app.get('/api/notes', (req, res) => {
-  const { notesCollection } = req.app.locals;
-
-  notesCollection
-    .find()
-    .toArray()
-    .then((result) => {
-      res.status(200).json(result);
-    });
-});
-
-app.get('/api/notes/:id', (req, res) => {
-  const { notesCollection } = req.app.locals;
-
-  notesCollection.findOne({ _id: ObjectId(req.params.id) }).then((result) => {
-    res.status(200).json(result);
-  });
-});
-
-app.put('/api/notes/:id', (req, res) => {
-  const { notesCollection } = req.app.locals;
-
-  notesCollection
-    .updateOne({ _id: ObjectId(req.params.id) }, { $set: { title: req.body.title, note: req.body.note } })
-    .then((result) => console.log(result));
-
-  res.status(200).json('Data successfully updated');
-});
-
-app.delete('/api/notes/:id', (req, res) => {
-  const { notesCollection } = req.app.locals;
-
-  notesCollection.deleteOne({ _id: ObjectId(req.params.id) }).then((result) => {
-    console.log(result);
-  });
-
-  res.status(200).json('Data successfully deleted');
-});
+// Route handler for express
+app.use('/', routes);
 
 app.listen(port, () => {
+  // eslint-disable-next-line no-console
   console.log(`API listening at http://localhost:${port}`);
 });
