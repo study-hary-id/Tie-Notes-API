@@ -10,6 +10,7 @@ const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
 
 const routes = require('./routes');
+const { logger } = require('./utils/logger');
 const handleErrors = require('./middlewares/errorHandler');
 
 // Express configuration section
@@ -21,7 +22,7 @@ const url = 'mongodb://localhost:27017';
 const dbName = 'DinoTesDB';
 
 // body-parser works as middleware
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Connect to MongoDB with MongoClient
 MongoClient.connect(url, (err, client) => {
@@ -38,5 +39,5 @@ app.use(handleErrors);
 
 app.listen(port, () => {
   // eslint-disable-next-line no-console
-  console.log(`API listening at http://localhost:${port}`);
+  logger.info(`API listening at http://localhost:${port}`);
 });
