@@ -8,6 +8,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
+const cors = require('cors');
 
 const dotenv = require('dotenv').config({ path: __dirname + '/.env' });
 
@@ -24,6 +25,7 @@ const url = process.env.MONGODB_URL;
 const dbName = process.env.DATABASE_NAME;
 
 // body-parser works as middleware
+app.use(cors());
 app.use(bodyParser.json());
 
 // Connect to MongoDB with MongoClient
