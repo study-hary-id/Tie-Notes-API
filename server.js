@@ -10,19 +10,17 @@ const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
 const cors = require('cors');
 
-const dotenv = require('dotenv').config({ path: __dirname + '/.env' });
-
 const routes = require('./routes');
 const { logger } = require('./utils/logger');
 const handleErrors = require('./middlewares/errorHandler');
 
 // Express configuration section
 const app = express();
-const port = process.env.PORT;
+const port = 3001;
 
 // Database configuration section
-const url = process.env.MONGODB_URL;
-const dbName = process.env.DATABASE_NAME;
+const url = 'mongodb://localhost:27017';
+const dbName = 'TieNotes';
 
 // body-parser works as middleware
 app.use(cors());
@@ -31,7 +29,7 @@ app.use(bodyParser.json());
 // Connect to MongoDB with MongoClient
 MongoClient.connect(url, (err, client) => {
   const db = client.db(dbName);
-  const notesCollection = db.collection(process.env.DATABASE_COLLECTION);
+  const notesCollection = db.collection('notes');
 
   app.locals.notesCollection = notesCollection;
 });
